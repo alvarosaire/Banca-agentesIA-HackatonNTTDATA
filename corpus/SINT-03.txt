@@ -1,0 +1,22 @@
+BANCO ANDINO DEL PERÚ S.A.
+MANUAL DE PROCEDIMIENTOS DE AGENCIAS
+Versión 1
+Tipo: Manual
+Fecha de emisión: 20 de mayo de 2025
+Vigente desde: 1 de junio de 2025
+Aprobado por: Gerencia de Operaciones
+
+Artículo 10. Apertura de la agencia
+La agencia debe abrir al público en el horario aprobado por la Gerencia de Operaciones. El supervisor de operaciones verifica el arqueo inicial de bóveda antes de iniciar la atención.
+
+Artículo 11. Atención al cliente
+Todo cliente debe ser identificado con su documento de identidad vigente y validado en el sistema biométrico antes de realizar cualquier operación.
+
+Artículo 12. Autonomías de aprobación de créditos
+El gerente de agencia aprueba créditos de consumo hasta S/ 80,000. Las solicitudes que excedan este monto se derivan al Comité de Créditos de la región con el informe del analista.
+
+Artículo 13. Custodia de expedientes
+Los expedientes de crédito se custodian en el archivo de la agencia y se digitalizan en el gestor documental dentro de los 5 días hábiles siguientes al desembolso.
+
+Artículo 14. Cierre de operaciones
+Al cierre del día, el supervisor de operaciones realiza el cuadre de caja y remite el reporte de cierre a la Gerencia de Operaciones.

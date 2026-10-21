@@ -1,0 +1,24 @@
+DOCUMENTO DE EJEMPLO BASADO EN NORMATIVA SBS, PARA DEMO
+SBS-EJ-02: Reglamento para la Gestión del Riesgo Operacional (ejemplo)
+Tipo: Reglamento
+Entidad: Superintendencia de Banca, Seguros y AFP (ejemplo, no oficial)
+Fecha de emisión: 10 de marzo de 2024
+Vigente desde: 1 de julio de 2024
+
+Artículo 1. Objeto
+El presente reglamento establece los criterios mínimos para la gestión del riesgo operacional en las empresas del sistema financiero.
+
+Artículo 2. Definición de riesgo operacional
+Se entiende por riesgo operacional la posibilidad de pérdidas debido a procesos inadecuados, fallas del personal, de la tecnología de información o eventos externos.
+
+Artículo 3. Responsabilidades del Directorio
+El Directorio aprueba la política de gestión del riesgo operacional y asigna los recursos necesarios para su adecuada implementación.
+
+Artículo 4. Registro de eventos de pérdida
+Las empresas deben mantener una base de datos de eventos de pérdida por riesgo operacional. Los eventos con pérdida superior a S/ 10,000 deben registrarse dentro de los 5 días hábiles de su detección.
+
+Artículo 5. Continuidad del negocio
+Las empresas deben contar con un plan de continuidad del negocio que se prueba al menos una vez al año, con un tiempo objetivo de recuperación de servicios críticos no mayor de 4 horas.
+
+Artículo 6. Reporte a la Superintendencia
+Los eventos de pérdida significativos se reportan a la Superintendencia dentro de los 10 días hábiles siguientes a su detección.

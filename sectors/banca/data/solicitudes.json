@@ -1,0 +1,5 @@
+[
+  {"id": "SOL-001", "cliente_id": "CLI-100", "producto": "préstamo personal", "monto": 15000, "plazo_meses": 24},
+  {"id": "SOL-002", "cliente_id": "CLI-200", "producto": "préstamo personal", "monto": 8000, "plazo_meses": 12},
+  {"id": "SOL-003", "cliente_id": "CLI-300", "producto": "tarjeta de crédito", "monto": 5000, "plazo_meses": 12}
+]

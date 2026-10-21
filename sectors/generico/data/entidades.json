@@ -1,0 +1,5 @@
+[
+  {"id": "ENT-001", "nombre": "Cliente Alfa", "estado": "activo", "saldo": 25000, "riesgo": "bajo"},
+  {"id": "ENT-002", "nombre": "Cliente Beta", "estado": "bloqueado", "saldo": 1200, "riesgo": "alto"},
+  {"id": "ENT-003", "nombre": "Cliente Gamma", "estado": "activo", "saldo": 8000, "riesgo": "medio"}
+]

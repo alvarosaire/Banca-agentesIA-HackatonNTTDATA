@@ -1,0 +1,11 @@
+{
+  "title": "Agentes de IA — Evaluación de crédito",
+  "subtitle": "Un analista de riesgo y un oficial de crédito evalúan solicitudes; el desembolso requiere aprobación humana.",
+  "case_label": "Solicitud a evaluar",
+  "tool_names": {"consultar_solicitud": "Consultar solicitud", "consultar_cliente": "Consultar cliente",
+                 "aprobar_credito": "Aprobar crédito"},
+  "field_names": {"solicitud_id": "Solicitud", "cliente_id": "Cliente", "monto": "Monto", "tasa_anual": "Tasa anual (%)",
+                  "plazo_meses": "Plazo (meses)", "score": "Score", "ingreso_mensual": "Ingreso mensual",
+                  "deuda_mensual": "Deuda mensual", "mora": "En mora", "nombre": "Nombre", "producto": "Producto",
+                  "estado": "Estado", "fecha": "Fecha", "aprobacion": "Aprobación", "id": "ID"}
+}

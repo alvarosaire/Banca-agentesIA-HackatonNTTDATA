@@ -1,0 +1,6 @@
+{
+  "title": "Agentes de IA — Operaciones",
+  "subtitle": "Agentes que analizan solicitudes, consultan datos y ejecutan acciones con control humano.",
+  "tool_names": {"consultar_entidad": "Consultar entidad", "crear_orden": "Crear orden"},
+  "field_names": {"entidad_id": "Entidad", "monto": "Monto", "descripcion": "Descripción"}
+}

@@ -1,0 +1,6 @@
+{
+  "blocked_tools": [],
+  "max_values": {"monto": 50000},
+  "approval_thresholds": {"monto": 10000},
+  "require_approval_tools": []
+}

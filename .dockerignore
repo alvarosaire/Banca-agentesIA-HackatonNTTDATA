@@ -1,0 +1,14 @@
+# Secretos: nunca en la imagen (se inyectan con env_file en runtime)
+.env
+.env.*
+!.env.example
+
+.git
+.venv
+venv
+__pycache__
+*.pyc
+runs
+caddy
+deploy.sh
+inicio.txt

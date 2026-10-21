@@ -1,0 +1,7 @@
+{
+  "SINT-01.txt": {"doc_id": "SINT-01", "nombre_norma": "Política de Crédito de Consumo", "entidad": "Banco (interna)", "tipo": "politica_interna", "tema": "credito_consumo", "fecha_emision": "2023-01-10", "fecha_vigencia": "2023-02-01", "version": "1", "reemplaza_a": null},
+  "SINT-02.txt": {"doc_id": "SINT-02", "nombre_norma": "Política de Crédito de Consumo", "entidad": "Banco (interna)", "tipo": "politica_interna", "tema": "credito_consumo", "fecha_emision": "2025-01-15", "fecha_vigencia": "2025-03-01", "version": "2", "reemplaza_a": "SINT-01"},
+  "SINT-03.txt": {"doc_id": "SINT-03", "nombre_norma": "Manual de Procedimientos de Agencias", "entidad": "Banco (interna)", "tipo": "manual", "tema": "aprobaciones_y_autonomias", "fecha_emision": "2025-05-20", "fecha_vigencia": "2025-06-01", "version": "1", "reemplaza_a": null},
+  "SBS-EJ-01.txt": {"doc_id": "SBS-EJ-01", "nombre_norma": "Reglamento de Transparencia de Información y Atención de Reclamos (ejemplo SBS, demo)", "entidad": "SBS (ejemplo para demo)", "tipo": "reglamento", "tema": "transparencia_tasas", "fecha_emision": "2023-06-15", "fecha_vigencia": "2024-01-01", "version": "1", "reemplaza_a": null},
+  "SBS-EJ-02.txt": {"doc_id": "SBS-EJ-02", "nombre_norma": "Reglamento para la Gestión del Riesgo Operacional (ejemplo SBS, demo)", "entidad": "SBS (ejemplo para demo)", "tipo": "reglamento", "tema": "riesgo_operacional", "fecha_emision": "2024-03-10", "fecha_vigencia": "2024-07-01", "version": "1", "reemplaza_a": null}
+}

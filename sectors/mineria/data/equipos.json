@@ -1,0 +1,8 @@
+[
+  {"id": "CAM-07", "tipo": "camión de acarreo", "area": "Tajo Norte", "estado": "operando",
+   "vibracion_mm_s": 9.1, "umbral_vibracion": 7.0, "temperatura_c": 98, "umbral_temperatura": 95, "horas_desde_mantenimiento": 480},
+  {"id": "PER-02", "tipo": "perforadora", "area": "Banco 3", "estado": "operando",
+   "vibracion_mm_s": 3.2, "umbral_vibracion": 6.0, "temperatura_c": 71, "umbral_temperatura": 90, "horas_desde_mantenimiento": 120},
+  {"id": "CHA-01", "tipo": "chancadora primaria", "area": "Planta", "estado": "detenido",
+   "vibracion_mm_s": 0.0, "umbral_vibracion": 8.0, "temperatura_c": 25, "umbral_temperatura": 85, "horas_desde_mantenimiento": 10}
+]

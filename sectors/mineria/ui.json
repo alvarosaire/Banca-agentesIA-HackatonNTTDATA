@@ -1,0 +1,13 @@
+{
+  "title": "Agentes de IA — Mantenimiento predictivo",
+  "subtitle": "Un monitor de condición y un planificador vigilan los equipos; detener un equipo requiere aprobación humana.",
+  "case_label": "Equipos a revisar",
+  "tool_names": {"consultar_equipo": "Consultar equipo", "programar_mantenimiento": "Programar mantenimiento",
+                 "detener_equipo": "Detener equipo"},
+  "field_names": {"equipo_id": "Equipo", "id": "ID", "tipo": "Tipo", "area": "Área", "estado": "Estado",
+                  "vibracion_mm_s": "Vibración (mm/s)", "umbral_vibracion": "Umbral vibración",
+                  "temperatura_c": "Temperatura (°C)", "umbral_temperatura": "Umbral temperatura",
+                  "horas_desde_mantenimiento": "Horas desde mantención", "prioridad": "Prioridad",
+                  "descripcion": "Descripción", "motivo": "Motivo", "orden_id": "Orden", "creada": "Creada",
+                  "fecha": "Fecha", "aprobacion": "Aprobación"}
+}

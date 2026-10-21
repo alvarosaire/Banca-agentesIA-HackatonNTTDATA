@@ -1,0 +1,5 @@
+[
+  {"id": "CLI-100", "nombre": "Ana Torres", "score": 720, "ingreso_mensual": 4500, "deuda_mensual": 600, "mora": false},
+  {"id": "CLI-200", "nombre": "Luis Paredes", "score": 540, "ingreso_mensual": 2100, "deuda_mensual": 900, "mora": true},
+  {"id": "CLI-300", "nombre": "Carla Ríos", "score": 680, "ingreso_mensual": 3200, "deuda_mensual": 400, "mora": false}
+]

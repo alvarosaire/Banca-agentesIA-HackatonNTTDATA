@@ -1,0 +1,20 @@
+# Secretos: nunca al repo
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.log
+*.sqlite3
+*.db
+.idea/
+.vscode/
+runs/
+inicio.txt
+data/normas.db*
+data/local_index_*.json
+data/uploads/

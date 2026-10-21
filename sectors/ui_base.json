@@ -1,0 +1,40 @@
+{
+  "title": "Agentes de IA — Operaciones",
+  "subtitle": "Agentes que analizan solicitudes, consultan datos y ejecutan acciones con control humano.",
+  "case_label": "Caso a resolver",
+  "case_placeholder": "Describe la solicitud que deben resolver los agentes...",
+  "launch_button": "Lanzar caso",
+  "example_button": "Cargar ejemplo",
+  "steps_title": "Pasos de los agentes",
+  "result_title": "Resultado final",
+  "approvals_title": "Aprobación requerida",
+  "approve_button": "Aprobar",
+  "reject_button": "Rechazar",
+  "comment_placeholder": "Comentario (opcional)",
+  "empty_state": "Lanza un caso para ver a los agentes trabajar en vivo.",
+  "status": {
+    "running": "Trabajando…",
+    "waiting_approval": "Esperando aprobación",
+    "completed": "Completado",
+    "failed": "Falló"
+  },
+  "step_types": {
+    "input": "Solicitud",
+    "thought": "Razonamiento",
+    "tool_call": "Herramienta",
+    "tool_result": "Resultado",
+    "guardrail": "Regla",
+    "approval_requested": "Aprobación pendiente",
+    "approval_decision": "Decisión humana",
+    "handoff": "Traspaso",
+    "final": "Respuesta",
+    "error": "Error"
+  },
+  "tool_names": {
+    "transferir_a": "Traspasar a agente"
+  },
+  "field_names": {
+    "agente": "Agente",
+    "instrucciones": "Instrucciones"
+  }
+}

@@ -1,0 +1,45 @@
+# Modo HTTPS (por defecto): Caddy obtiene el certificado automáticamente para APP_HOST.
+# APP_HOST = <IP-con-guiones>.sslip.io (ej. 203-0-113-5.sslip.io)
+{$APP_HOST} {
+	encode gzip
+	# Público: login y salud
+	@publico path /login /logout /auth/* /health
+	handle @publico {
+		reverse_proxy app:8000
+	}
+	# Chat: empleado o administrador
+	@chat path /chat /api/chat /api/chat/*
+	handle @chat {
+		forward_auth app:8000 {
+			uri /auth/check?rol=empleado
+			copy_headers X-Usuario X-Rol X-Area
+			# la verificación es un GET normal: sin los encabezados del websocket de Streamlit
+			header_up -Connection
+			header_up -Upgrade
+		}
+		reverse_proxy app:8000
+	}
+	# API y documentación: solo administrador
+	@api path /api/* /docs /openapi.json
+	handle @api {
+		forward_auth app:8000 {
+			uri /auth/check?rol=admin
+			copy_headers X-Usuario X-Rol X-Area
+			# la verificación es un GET normal: sin los encabezados del websocket de Streamlit
+			header_up -Connection
+			header_up -Upgrade
+		}
+		reverse_proxy app:8000
+	}
+	# Panel (Streamlit): solo administrador
+	handle {
+		forward_auth app:8000 {
+			uri /auth/check?rol=admin
+			copy_headers X-Usuario X-Rol X-Area
+			# la verificación es un GET normal: sin los encabezados del websocket de Streamlit
+			header_up -Connection
+			header_up -Upgrade
+		}
+		reverse_proxy ui:8501
+	}
+}

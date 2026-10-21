@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ingresar · Normativa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&display=swap">
+<style>
+/* Mismos tokens que /chat y el panel */
+:root{
+  --bg:#F6F7F9; --surface:#FFFFFF; --surface-2:#F8F9FA; --line:#E3E7EB; --text:#0F1A1F; --muted:#5B6770; --faint:#8A949C;
+  --acc:#0F4C5C; --acc-hover:#0B3B48; --acc-ink:#FFFFFF; --bad:#B3362F; --bad-bg:#FBEAE8;
+  --shadow:0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.05);
+  --sans:"Geist","Segoe UI",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0D1114; --surface:#151A1E; --surface-2:#1B2126; --line:#262E34; --text:#E6EAED; --muted:#9AA5AD; --faint:#6E7A82;
+    --acc:#2B7F92; --acc-hover:#3591A5; --acc-ink:#FFFFFF; --bad:#EE8077; --bad-bg:#33181A;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--text);
+  font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased;padding:16px}
+.wrap{width:min(400px,100%);display:grid;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:650;font-size:15px;letter-spacing:-.02em}
+.logo{width:30px;height:30px;border-radius:8px;background:var(--acc);display:grid;place-items:center;flex:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:32px 28px 28px;display:grid;gap:18px;box-shadow:var(--shadow)}
+h1{margin:0 0 4px;font-size:24px;font-weight:650;letter-spacing:-.03em;line-height:1.25}
+p{margin:0;color:var(--muted);font-size:15px}
+label{display:grid;gap:7px;font-weight:550;font-size:14px}
+input{font:inherit;font-size:16px;height:46px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--text);
+  transition:border-color .15s, box-shadow .15s, background .15s}
+input:hover{border-color:color-mix(in srgb,var(--acc) 30%,var(--line))}
+input:focus{outline:none;border-color:var(--acc);background:var(--surface);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 15%,transparent)}
+button{font:inherit;font-weight:600;height:46px;border:0;border-radius:10px;background:var(--acc);color:var(--acc-ink);cursor:pointer;margin-top:4px;transition:background .15s}
+button:hover{background:var(--acc-hover)}
+button:focus-visible{outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 30%,transparent)}
+.err{background:var(--bad-bg);color:var(--bad);padding:10px 14px;border-radius:10px;font-size:14px;font-weight:500}
+.roles{font-size:13.5px;color:var(--muted);display:grid;gap:6px;padding:0 4px}
+.roles b{color:var(--text);font-weight:600}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><div class="logo" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z"/></svg></div>Normativa · Agentes de IA</div>
+  <form class="card" method="post" action="/login">
+    <div>
+      <h1>Ingresar</h1>
+      <p>Accede con tu usuario del banco</p>
+    </div>
+    <div class="err" id="err" hidden>Usuario o contraseña incorrectos.</div>
+    <label>Usuario <input name="usuario" id="usuario" autocomplete="username" required autofocus></label>
+    <label>Contraseña <input name="clave" id="clave" type="password" autocomplete="current-password" required></label>
+    <input type="hidden" name="next" id="next">
+    <button type="submit">Ingresar</button>
+  </form>
+  <div class="roles"><div><b>Administrador</b> · panel de normas, discrepancias, trazas, dashboard y KPIs.</div>
+    <div><b>Empleado</b> · chat de consultas y evaluación de casos.</div></div>
+</div>
+<script>
+var q = new URLSearchParams(location.search);
+if (q.get("error")) document.getElementById("err").hidden = false;
+document.getElementById("next").value = q.get("next") || "";
+</script>
+</body>
+</html>

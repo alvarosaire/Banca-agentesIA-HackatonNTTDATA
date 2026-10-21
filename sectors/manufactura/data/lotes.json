@@ -1,0 +1,8 @@
+[
+  {"id": "L-2041", "producto": "Tapa A-30", "linea": "L1", "unidades": 12000, "tasa_defectos_pct": 4.8,
+   "limite_defectos_pct": 2.0, "defecto_principal": "rebaba en borde", "estado": "en espera de liberación"},
+  {"id": "L-2042", "producto": "Tapa A-30", "linea": "L2", "unidades": 10000, "tasa_defectos_pct": 0.9,
+   "limite_defectos_pct": 2.0, "defecto_principal": "ninguno relevante", "estado": "en espera de liberación"},
+  {"id": "L-2043", "producto": "Envase B-500", "linea": "L3", "unidades": 8000, "tasa_defectos_pct": 1.5,
+   "limite_defectos_pct": 1.0, "defecto_principal": "espesor fuera de tolerancia", "estado": "retenido"}
+]

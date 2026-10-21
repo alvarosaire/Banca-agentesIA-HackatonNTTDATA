@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agentes de IA</title>
+<style>
+  :root {
+    --bg: #f4f6fa; --panel: #ffffff; --ink: #14181f; --muted: #5b6575; --line: #dde2ea;
+    --brand: #1f4fd8;
+    --thought: #6b3fd6; --thought-bg: #f2edff;
+    --tool: #1f62d8; --tool-bg: #eaf1ff;
+    --result: #0d7a5a; --result-bg: #e6f6f0;
+    --approval: #b45f00; --approval-bg: #fff3e0;
+    --danger: #c42b2b; --danger-bg: #fdecec;
+    --handoff: #0e7490; --handoff-bg: #e6f6fa;
+    --final: #14181f; --final-bg: #fffbe6;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 18px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { background: var(--panel); border-bottom: 1px solid var(--line); padding: 20px 32px; }
+  header h1 { margin: 0; font-size: 30px; }
+  header p { margin: 4px 0 0; color: var(--muted); }
+  main { display: grid; grid-template-columns: minmax(320px, 1fr) 2fr; gap: 24px; padding: 24px 32px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; padding: 16px; } header { padding: 16px; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .panel h2 { margin: 0 0 12px; font-size: 20px; }
+  label { font-weight: 600; display: block; margin-bottom: 8px; }
+  textarea, input[type=text] { width: 100%; font: inherit; padding: 12px; border: 1px solid var(--line);
+         border-radius: 8px; background: #fff; color: var(--ink); }
+  textarea { min-height: 170px; resize: vertical; }
+  .row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  button { font: inherit; font-weight: 600; border: 0; border-radius: 8px; padding: 10px 18px; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+  .primary { background: var(--brand); color: #fff; }
+  .secondary { background: #e7ebf2; color: var(--ink); }
+  .approve { background: var(--result); color: #fff; }
+  .reject { background: var(--danger); color: #fff; }
+  .status { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 15px; font-weight: 700;
+            background: #e7ebf2; color: var(--muted); margin-left: 8px; vertical-align: middle; }
+  .status.running { background: var(--tool-bg); color: var(--tool); }
+  .status.waiting_approval { background: var(--approval-bg); color: var(--approval); }
+  .status.completed { background: var(--result-bg); color: var(--result); }
+  .status.failed { background: var(--danger-bg); color: var(--danger); }
+  .steps { display: flex; flex-direction: column; gap: 10px; }
+  .empty { color: var(--muted); padding: 24px 0; text-align: center; }
+  .step { border-left: 6px solid var(--line); background: #fafbfd; border-radius: 8px; padding: 10px 14px;
+          animation: in .25s ease-out; }
+  @keyframes in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  .step .meta { display: flex; gap: 10px; align-items: center; font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+  .badge { font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .04em;
+           padding: 2px 8px; border-radius: 6px; }
+  .agent { font-weight: 600; color: var(--ink); }
+  .step .body { white-space: pre-wrap; word-break: break-word; }
+  .t-input { border-color: #8a94a6; } .t-input .badge { background: #e7ebf2; color: #3b4352; }
+  .t-thought { border-color: var(--thought); background: var(--thought-bg); }
+  .t-thought .badge { background: var(--thought); color: #fff; } .t-thought .body { font-style: italic; }
+  .t-tool_call { border-color: var(--tool); background: var(--tool-bg); } .t-tool_call .badge { background: var(--tool); color: #fff; }
+  .t-tool_result { border-color: var(--result); background: var(--result-bg); } .t-tool_result .badge { background: var(--result); color: #fff; }
+  .t-approval_requested, .t-approval_decision { border-color: var(--approval); background: var(--approval-bg); }
+  .t-approval_requested .badge, .t-approval_decision .badge { background: var(--approval); color: #fff; }
+  .t-guardrail, .t-error { border-color: var(--danger); background: var(--danger-bg); }
+  .t-guardrail .badge, .t-error .badge { background: var(--danger); color: #fff; }
+  .t-handoff { border-color: var(--handoff); background: var(--handoff-bg); } .t-handoff .badge { background: var(--handoff); color: #fff; }
+  .t-final { border-color: var(--final); background: var(--final-bg); } .t-final .badge { background: var(--final); color: #fff; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 2px 14px; margin-top: 4px; }
+  .kv dt { color: var(--muted); } .kv dd { margin: 0; font-weight: 600; }
+  .approval-card { border: 2px solid var(--approval); background: var(--approval-bg); border-radius: 12px;
+                   padding: 16px; margin-bottom: 16px; }
+  .approval-card h3 { margin: 0 0 6px; color: var(--approval); }
+  .reason { margin: 6px 0 10px; }
+  .result { border-top: 1px solid var(--line); margin-top: 20px; padding-top: 16px; }
+  .md table { border-collapse: collapse; margin: 8px 0; }
+  .md th, .md td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+  .md th { background: #f0f3f8; }
+  .md h1, .md h2, .md h3 { margin: 12px 0 6px; font-size: 20px; }
+  .md p { margin: 6px 0; } .md ul { margin: 6px 0; padding-left: 24px; }
+  .md code { background: #eef1f6; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Agentes de IA</h1>
+  <p id="subtitle"></p>
+</header>
+<main>
+  <section class="panel">
+    <label for="caseInput" id="caseLabel">Caso</label>
+    <textarea id="caseInput"></textarea>
+    <div class="row">
+      <button class="primary" id="launchBtn">Lanzar</button>
+      <button class="secondary" id="exampleBtn">Ejemplo</button>
+    </div>
+  </section>
+  <section class="panel">
+    <h2><span id="stepsTitle">Pasos</span><span id="status" class="status" hidden></span></h2>
+    <div id="approvals"></div>
+    <div id="steps" class="steps"></div>
+    <div id="result" class="result" hidden>
+      <h2 id="resultTitle">Resultado</h2>
+      <div id="resultBody" class="md"></div>
+    </div>
+  </section>
+</main>
+<script>
+let UI = {}, EXAMPLE = "", runId = null, timer = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const tr = (group, key) => (UI[group] && UI[group][key]) || key;
+
+// Markdown mínimo para el resultado final (títulos, negritas, listas, tablas, código).
+function md(text) {
+  const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>").replace(/`([^`]+)`/g, "<code>$1</code>");
+  const lines = String(text || "").split("\n"), out = [];
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    if (/^\s*\|/.test(l)) {
+      const rows = [];
+      while (i < lines.length && /^\s*\|/.test(lines[i])) rows.push(lines[i++]);
+      i--;
+      const cells = r => r.trim().replace(/^\||\|$/g, "").split("|").map(c => c.trim());
+      const body = rows.filter(r => !/^\s*\|[\s:|-]+\|\s*$/.test(r));
+      out.push("<table>" + body.map((r, k) => "<tr>" + cells(r).map(c =>
+        k === 0 ? `<th>${inline(c)}</th>` : `<td>${inline(c)}</td>`).join("") + "</tr>").join("") + "</table>");
+    } else if (/^\s*[-*] /.test(l)) {
+      const items = [];
+      while (i < lines.length && /^\s*[-*] /.test(lines[i])) items.push(lines[i++].replace(/^\s*[-*] /, ""));
+      i--;
+      out.push("<ul>" + items.map(x => `<li>${inline(x)}</li>`).join("") + "</ul>");
+    } else if (/^#{1,6} /.test(l)) {
+      out.push(`<h3>${inline(l.replace(/^#+ /, ""))}</h3>`);
+    } else if (l.trim()) {
+      out.push(`<p>${inline(l)}</p>`);
+    }
+  }
+  return out.join("");
+}
+
+function kv(obj) {
+  return '<dl class="kv">' + Object.entries(obj || {}).map(([k, v]) =>
+    `<dt>${esc(tr("field_names", k))}</dt><dd>${esc(typeof v === "object" ? JSON.stringify(v) : v)}</dd>`).join("") + "</dl>";
+}
+
+function stepBody(s) {
+  if (s.type === "tool_call" && s.data && s.data.tool)
+    return `<strong>${esc(tr("tool_names", s.data.tool))}</strong>${kv(s.data.arguments)}`;
+  if (s.type === "tool_result" && s.data && s.data.result && typeof s.data.result === "object")
+    return kv(s.data.result);
+  if (s.type === "final") return `<div class="md">${md(s.data.full || s.summary)}</div>`;
+  return `<div class="body">${esc(s.summary)}</div>`;
+}
+
+function render(run) {
+  const st = $("status");
+  st.hidden = false; st.className = "status " + run.status; st.textContent = tr("status", run.status);
+  $("steps").innerHTML = run.steps.map(s => `
+    <div class="step t-${esc(s.type)}">
+      <div class="meta"><span class="badge">${esc(tr("step_types", s.type))}</span>
+        <span class="agent">${esc(s.agent)}</span><span>${esc(s.ts.slice(11))}</span></div>
+      ${stepBody(s)}
+    </div>`).join("");
+
+  const pending = run.approvals.filter(a => a.status === "pending");
+  // No redibujar la tarjeta si ya está (para no borrar el comentario que se está escribiendo)
+  const current = $("approvals").dataset.ids || "";
+  const ids = pending.map(a => a.id).join(",");
+  if (ids !== current) {
+    $("approvals").dataset.ids = ids;
+    $("approvals").innerHTML = pending.map(a => `
+      <div class="approval-card">
+        <h3>${esc(UI.approvals_title)}: ${esc(tr("tool_names", a.tool))}</h3>
+        <div class="reason">${esc(a.reason)} · <span class="agent">${esc(a.agent)}</span></div>
+        ${kv(a.arguments)}
+        <div class="row"><input type="text" id="c-${a.id}" placeholder="${esc(UI.comment_placeholder)}"></div>
+        <div class="row">
+          <button class="approve" onclick="decide('${a.id}', true)">${esc(UI.approve_button)}</button>
+          <button class="reject" onclick="decide('${a.id}', false)">${esc(UI.reject_button)}</button>
+        </div>
+      </div>`).join("");
+  }
+
+  const done = run.status === "completed" || run.status === "failed";
+  $("result").hidden = !done;
+  if (done) $("resultBody").innerHTML = md(run.output || run.error || "");
+  $("launchBtn").disabled = !done;
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  return done;
+}
+
+async function poll() {
+  try {
+    const r = await fetch(`/api/runs/${runId}`);
+    if (r.ok && render(await r.json())) return;
+  } catch (e) { console.warn(e); }
+  timer = setTimeout(poll, 1000);
+}
+
+async function launch() {
+  clearTimeout(timer);
+  $("launchBtn").disabled = true;
+  $("steps").innerHTML = ""; $("approvals").innerHTML = ""; $("approvals").dataset.ids = "";
+  $("result").hidden = true;
+  const r = await fetch("/api/runs", { method: "POST", headers: { "Content-Type": "application/json" },
+                                       body: JSON.stringify({ input: $("caseInput").value }) });
+  if (!r.ok) { alertBox("No se pudo lanzar el caso"); $("launchBtn").disabled = false; return; }
+  runId = (await r.json()).id;
+  poll();
+}
+
+async function decide(id, approved) {
+  document.querySelectorAll(".approval-card button").forEach(b => b.disabled = true);
+  const comment = ($("c-" + id) || {}).value || null;
+  await fetch(`/api/approvals/${id}`, { method: "POST", headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ approved, comment }) });
+  $("approvals").innerHTML = ""; $("approvals").dataset.ids = "";
+  clearTimeout(timer); poll();
+}
+
+function alertBox(msg) { $("steps").innerHTML = `<div class="step t-error"><div class="body">${esc(msg)}</div></div>`; }
+
+async function init() {
+  const r = await fetch("/api/ui");
+  const cfg = await r.json();
+  UI = cfg.ui; EXAMPLE = cfg.example;
+  document.title = UI.title;
+  $("title").textContent = UI.title; $("subtitle").textContent = UI.subtitle;
+  $("caseLabel").textContent = UI.case_label; $("caseInput").placeholder = UI.case_placeholder;
+  $("launchBtn").textContent = UI.launch_button; $("exampleBtn").textContent = UI.example_button;
+  $("stepsTitle").textContent = UI.steps_title; $("resultTitle").textContent = UI.result_title;
+  $("steps").innerHTML = `<div class="empty">${esc(UI.empty_state)}</div>`;
+  $("caseInput").value = EXAMPLE;
+  $("launchBtn").onclick = launch;
+  $("exampleBtn").onclick = () => { $("caseInput").value = EXAMPLE; };
+}
+init();
+</script>
+</body>
+</html>

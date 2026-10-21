@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Normativa · Asistente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap">
+<style>
+/* Sistema visual compartido con /login y el panel: neutro frío, un solo acento azul petróleo. */
+:root{
+  --bg:#F6F7F9; --surface:#FFFFFF; --surface-2:#F3F5F7; --line:#E3E7EB; --line-2:#ECEFF2;
+  --text:#0F1A1F; --muted:#5B6770; --faint:#8A949C;
+  --acc:#0F4C5C; --acc-hover:#0B3B48; --acc-ink:#FFFFFF; --acc-soft:#E8F0F2; --acc-text:#0F4C5C;
+  --user:#E7EDF0; --user-ink:#0F1A1F;
+  --ok:#1E7A4F; --ok-bg:#E8F4EE; --warn:#9A6200; --warn-bg:#FBF1DE; --bad:#B3362F; --bad-bg:#FBEAE8;
+  --vio:#5B4A9E; --vio-bg:#EEEBF7; --gray-bg:#EEF1F4;
+  --shadow:0 1px 2px rgba(16,24,40,.04); --shadow-2:0 4px 16px rgba(16,24,40,.06), 0 1px 2px rgba(16,24,40,.04);
+  --r-sm:8px; --r:12px; --col:760px;
+  --sans:"Geist","Segoe UI",system-ui,-apple-system,sans-serif; --mono:"Geist Mono","Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0D1114; --surface:#151A1E; --surface-2:#1B2126; --line:#262E34; --line-2:#20272C;
+    --text:#E6EAED; --muted:#9AA5AD; --faint:#6E7A82;
+    --acc:#2B7F92; --acc-hover:#3591A5; --acc-ink:#FFFFFF; --acc-soft:#16303A; --acc-text:#7CC3D3;
+    --user:#1F272D; --user-ink:#E6EAED;
+    --ok:#5CC28F; --ok-bg:#14281F; --warn:#E0A84A; --warn-bg:#2E2410; --bad:#EE8077; --bad-bg:#33181A;
+    --vio:#B3A6EC; --vio-bg:#241F3A; --gray-bg:#1F262B;
+    --shadow:0 1px 2px rgba(0,0,0,.3); --shadow-2:0 6px 20px rgba(0,0,0,.35);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--text);font:16.5px/1.6 var(--sans);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+button{font:inherit;cursor:pointer;color:inherit}
+code,.mono{font-family:var(--mono)}
+svg{display:block}
+/* cabecera mínima */
+header{padding:14px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header .logo{width:30px;height:30px;border-radius:8px;background:var(--acc);display:grid;place-items:center;flex:none}
+header h1{margin:0;font-size:16.5px;font-weight:650;letter-spacing:-.02em;line-height:1.3}
+header p{margin:0;font-size:13.5px;color:var(--muted);line-height:1.3}
+header .sp{flex:1}
+#who{font-size:13.5px;color:var(--muted)}
+header a{color:var(--muted);font-size:14px;text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .15s,color .15s}
+header a:hover{color:var(--text);background:var(--gray-bg)}
+.hbtn{display:inline-flex;align-items:center;gap:8px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:999px;padding:7px 14px 7px 11px;font-size:14px;font-weight:550;box-shadow:var(--shadow);transition:border-color .15s,color .15s}
+.hbtn:hover{border-color:var(--acc);color:var(--acc-text)}
+main{flex:1;min-height:0;display:flex;justify-content:center;position:relative}
+#chat{flex:1;display:flex;flex-direction:column;min-height:0;position:relative}
+#msgs{flex:1;overflow-y:auto;padding:28px 24px 24px}
+#msgs > *{max-width:var(--col);margin-left:auto;margin-right:auto}
+.drop-over #msgs{outline:2px dashed var(--acc);outline-offset:-12px;background:color-mix(in srgb,var(--acc) 5%,transparent)}
+.row{display:flex;margin-bottom:28px}
+.row.u{justify-content:flex-end}
+.bubble{max-width:82%;word-wrap:break-word}
+.row.u .bubble{background:var(--user);color:var(--user-ink);padding:11px 18px;border-radius:20px 20px 6px 20px;white-space:pre-wrap}
+.row.a .bubble{width:100%;max-width:100%;white-space:normal}
+.row.a.short .bubble{width:auto}
+.bubble .file{display:inline-flex;margin-top:8px;font-size:13px;padding:3px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+.who{font-size:13px;font-weight:550;color:var(--muted);margin-bottom:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row.a .who:before{content:"";width:18px;height:18px;border-radius:6px;background:var(--acc);flex:none}
+.txt{white-space:pre-wrap}
+.row.a .txt{line-height:1.65}
+.err{background:var(--bad-bg)!important;border:1px solid color-mix(in srgb,var(--bad) 30%,transparent)!important;color:var(--text);padding:12px 16px;border-radius:var(--r)}
+.err b{color:var(--bad);font-weight:600}
+/* pills: mismo estilo que st.badge del panel */
+.badge{display:inline-flex;align-items:center;font-size:13px;font-weight:550;line-height:1.5;padding:1px 10px;border-radius:999px;white-space:nowrap}
+.b-ok{background:var(--ok-bg);color:var(--ok)}
+.b-warn{background:var(--warn-bg);color:var(--warn)}
+.b-bad{background:var(--bad-bg);color:var(--bad)}
+.b-vio{background:var(--vio-bg);color:var(--vio)}
+.b-gray{background:var(--gray-bg);color:var(--muted)}
+.meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px;font-size:13px;color:var(--faint)}
+.linkbtn{background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:6px 12px;font-size:14px;transition:border-color .15s}
+.linkbtn:hover{border-color:var(--acc)}
+h3.sec{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:26px 0 10px;font-weight:600}
+.cites{display:grid;gap:10px}
+.cite{border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;background:var(--surface);box-shadow:var(--shadow)}
+.cite .hd{font-weight:600;font-size:15px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;letter-spacing:-.01em;line-height:1.4}
+.dl{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--acc);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:3px 10px;margin-left:auto;transition:background .15s,border-color .15s}
+.dl:hover{background:color-mix(in srgb,var(--acc) 8%,transparent);border-color:color-mix(in srgb,var(--acc) 35%,var(--line))}
+.dl svg{width:13px;height:13px}
+.razon-btn{margin-left:auto}
+.cite .hd small{font-weight:400;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.cite q,.quote{display:block;margin-top:8px;color:var(--muted);font-size:15px;line-height:1.6;quotes:"\201C" "\201D"}
+.aplica{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;font-size:12.5px;color:var(--faint)}
+.achip{display:inline-block;font-size:12.5px;padding:1px 9px;border-radius:999px;background:var(--gray-bg);color:var(--muted)}
+.nota-area{margin-top:10px;font-size:14px;background:var(--warn-bg);color:var(--text);border-radius:var(--r-sm);padding:8px 12px}
+.coord{display:flex;flex-wrap:wrap;gap:8px}
+.coord .achip{font-size:14px;padding:3px 12px;background:var(--acc-soft);color:var(--acc-text)}
+.warns{display:grid;gap:8px;margin-top:16px}
+.warnbox{background:var(--warn-bg);border-radius:var(--r);padding:12px 16px;font-size:15px;line-height:1.6}
+.warnbox b{color:var(--warn);font-weight:600}
+/* dictamen */
+.dict{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-top:14px;background:var(--surface);box-shadow:var(--shadow)}
+.banner{padding:18px 22px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.banner .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.07em;font-weight:600;opacity:.8}
+.banner .conc{font-size:24px;font-weight:650;letter-spacing:-.025em;line-height:1.25}
+.c-procede{background:var(--ok-bg);color:var(--ok)}
+.c-procede_con_observaciones{background:var(--warn-bg);color:var(--warn)}
+.c-no_procede{background:var(--bad-bg);color:var(--bad)}
+.c-requiere_escalamiento{background:var(--vio-bg);color:var(--vio)}
+.c-x{background:var(--gray-bg);color:var(--muted)}
+.dbody{padding:2px 22px 20px}
+.resumen{margin-top:16px}
+table.hechos{width:100%;border-collapse:collapse;font-size:15px}
+table.hechos td{border-bottom:1px solid var(--line-2);padding:9px 4px;vertical-align:top}
+table.hechos tr:last-child td{border-bottom:none}
+table.hechos td:first-child{color:var(--muted);width:45%}
+table.hechos td:last-child{font-weight:550;font-variant-numeric:tabular-nums}
+.eval{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;background:var(--surface)}
+.eval .top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.eval .regla{font-weight:600;font-size:15.5px;flex:1;min-width:200px;letter-spacing:-.01em}
+.eval .ref{font-size:13px;color:var(--muted);margin-top:4px}
+.eval details{margin-top:8px}
+.eval summary{cursor:pointer;color:var(--acc-text);font-size:14px}
+.eval .expl{margin-top:8px;font-size:15px}
+.calc{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line-2);padding:10px 2px}
+.calc code{font-size:13.5px;background:var(--surface-2);padding:2px 8px;border-radius:6px;display:inline-block;margin-top:4px}
+.calc .res{font-weight:600;font-size:17px;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+ul.lst,ol.lst{margin:4px 0;padding-left:22px}
+ul.lst li,ol.lst li{margin:6px 0}
+.box{border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:15px}
+.box.conf{background:var(--warn-bg)}
+.box.vac{background:var(--acc-soft)}
+/* estado vacío */
+#empty{padding-top:5vh}
+#empty h2{font-size:30px;font-weight:650;letter-spacing:-.03em;line-height:1.2;margin:0 0 10px}
+#empty p.lead{color:var(--muted);margin:0 0 8px;max-width:640px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);color:var(--text);transition:border-color .15s,box-shadow .15s,transform .15s}
+.card:hover{border-color:color-mix(in srgb,var(--acc) 45%,var(--line));box-shadow:var(--shadow-2);transform:translateY(-1px)}
+.card .k{font-size:12px;color:var(--faint);font-family:var(--mono);letter-spacing:.02em}
+.card .t{font-weight:600;font-size:16px;margin:4px 0;letter-spacing:-.015em;line-height:1.35}
+.card .d{font-size:14px;line-height:1.5;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sugs{display:flex;flex-wrap:wrap;gap:8px}
+.sug{background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 15px;font-size:14.5px;transition:border-color .15s,color .15s}
+.sug:hover{border-color:var(--acc);color:var(--acc-text)}
+/* progreso */
+.prog{display:grid;gap:9px;min-width:280px;margin-top:2px}
+.stage{display:flex;align-items:center;gap:10px;color:var(--faint);font-size:15px;transition:color .3s}
+.stage .dot{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;font-size:10px;line-height:1}
+.stage.on{color:var(--text);font-weight:550}
+.stage.on .dot{border-color:var(--acc);border-top-color:transparent;animation:spin .8s linear infinite}
+.stage.done{color:var(--muted)}
+.stage.done .dot{border-color:var(--ok);background:var(--ok);color:#fff}
+.elapsed{font-size:12.5px;color:var(--faint);margin-top:8px;font-family:var(--mono)}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* compositor flotante */
+#composer{padding:4px 24px 16px}
+#composer > *{max-width:var(--col);margin-left:auto;margin-right:auto}
+#chipwrap{margin-bottom:8px;display:none}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--acc-soft);color:var(--acc-text);border-radius:999px;padding:3px 4px 3px 12px;font-size:14px}
+.chip button{border:none;background:transparent;color:inherit;font-size:17px;line-height:1;padding:0 6px;border-radius:999px}
+.inrow{display:flex;gap:6px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:7px;box-shadow:var(--shadow-2);transition:border-color .15s,box-shadow .15s}
+.inrow:focus-within{border-color:color-mix(in srgb,var(--acc) 55%,var(--line));box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 12%,transparent),var(--shadow-2)}
+textarea{flex:1;resize:none;min-height:42px;max-height:220px;font:inherit;line-height:1.5;padding:9px 6px;border:none;background:transparent;color:var(--text);outline:none}
+textarea::placeholder{color:var(--faint)}
+.ibtn{height:42px;width:42px;flex:none;border-radius:50%;border:none;background:transparent;color:var(--muted);display:grid;place-items:center;transition:background .15s,color .15s}
+.ibtn:hover{background:var(--gray-bg);color:var(--text)}
+#send{background:var(--acc);color:var(--acc-ink)}
+#send:hover{background:var(--acc-hover);color:var(--acc-ink)}
+#send:disabled,.ibtn:disabled{opacity:.45;cursor:not-allowed}
+#send.busy svg{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hint{font-size:12.5px;color:var(--faint);margin-top:8px;text-align:center}
+/* panel lateral de traza */
+#scrim{position:fixed;inset:0;background:rgba(10,15,18,.3);display:none;z-index:20}
+#drawer{position:fixed;top:0;right:0;height:100%;width:min(620px,100%);background:var(--surface);border-left:1px solid var(--line);box-shadow:var(--shadow-2);transform:translateX(105%);transition:transform .2s;z-index:21;display:flex;flex-direction:column}
+#drawer.open{transform:none}
+#drawer .dh{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+#drawer .dh h2{margin:0;font-size:17px;font-weight:650;letter-spacing:-.02em;flex:1}
+#drawer .dc{overflow-y:auto;padding:16px 20px;flex:1}
+.tl{position:relative;padding-left:34px}
+.tl:before{content:"";position:absolute;left:13px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.step{position:relative;margin-bottom:14px}
+.step .ic{position:absolute;left:-34px;top:0;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;background:var(--gray-bg);color:var(--muted);border:2px solid var(--surface)}
+.step .sh{font-size:13px;color:var(--muted)}
+.step .sh b{color:var(--text);font-size:14px}
+.step .ss{margin-top:2px}
+.t-input .ic{background:var(--acc-soft);color:var(--acc-text)}
+.t-thought .ic{background:var(--vio-bg);color:var(--vio)}
+.t-tool_call .ic{background:var(--warn-bg);color:var(--warn)}
+.t-tool_result .ic{background:var(--ok-bg);color:var(--ok)}
+.t-final .ic{background:var(--acc);color:var(--acc-ink)}
+.t-error .ic{background:var(--bad-bg);color:var(--bad)}
+.t-verificacion .ic{background:var(--ok-bg);color:var(--ok)}
+pre.js{font-family:var(--mono);font-size:12.5px;background:var(--surface-2);padding:8px 10px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;word-break:break-word;margin:6px 0 0;max-height:320px}
+.hits{margin:6px 0 0;padding:0;list-style:none;font-size:14px}
+.hits li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line-2);padding:3px 0}
+.notice{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;color:var(--muted);font-size:15px}
+details>summary{cursor:pointer}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:700px){
+  body{font-size:16px}
+  header{padding:10px 14px}
+  header p,#who{display:none}
+  #msgs{padding:16px 14px}
+  #composer{padding:4px 10px 12px}
+  .bubble{max-width:92%}
+  .cards{grid-template-columns:1fr}
+  .banner .conc{font-size:20px}
+  .dbody{padding:2px 14px 16px}
+  .hbtn span{display:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14M7 7l-3 7a3 3 0 0 0 6 0zM17 7l-3 7a3 3 0 0 0 6 0z"/></svg></div>
+  <div>
+    <h1>Normativa · Asistente</h1>
+    <p>Evalúa casos contra las políticas y normas vigentes, con citas verificables</p>
+  </div>
+  <div class="sp"></div>
+  <span id="who"></span>
+  <a href="/" id="adminlink" title="Normas, discrepancias, trazas y dashboard" hidden>Panel de administración</a>
+  <a href="/logout" title="Cerrar sesión">Salir</a>
+  <button class="hbtn" id="newconv" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Nueva conversación</span></button>
+</header>
+<main>
+  <section id="chat">
+    <div id="msgs" aria-live="polite"></div>
+    <div id="composer">
+      <div id="chipwrap"></div>
+      <div class="inrow">
+        <button class="ibtn" id="attach" type="button" title="Adjuntar caso (PDF, DOCX, TXT)" aria-label="Adjuntar archivo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg></button>
+        <input type="file" id="file" accept=".pdf,.docx,.txt" hidden>
+        <textarea id="inp" rows="1" placeholder="Describe el caso o haz una consulta sobre la normativa..."></textarea>
+        <button class="ibtn" id="send" type="button" title="Enviar" aria-label="Enviar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+      </div>
+      <div class="hint">Enter envía · Shift+Enter nueva línea · Arrastra un PDF, DOCX o TXT para adjuntarlo</div>
+    </div>
+  </section>
+</main>
+<div id="scrim"></div>
+<aside id="drawer" aria-label="Razonamiento del agente">
+  <div class="dh"><h2>Cómo razonó el agente</h2><button class="linkbtn" id="dclose" type="button">Cerrar</button></div>
+  <div class="dc" id="dcontent"></div>
+</aside>
+<script>
+(function(){
+"use strict";
+var SUGERIDAS = [
+  "¿Cuál es el límite de endeudamiento para un crédito de consumo?",
+  "¿Hasta qué monto puede aprobar un gerente de agencia?",
+  "¿Qué política aplica a préstamos garantizados con criptoactivos?"
+];
+var STAGES = ["Extrayendo hechos del caso", "Buscando normas vigentes", "Evaluando reglas", "Verificando citas"];
+var TIMEOUT_MS = 120000;
+var $ = function(id){ return document.getElementById(id); };
+var msgs = $("msgs"), inp = $("inp"), sendBtn = $("send"), fileIn = $("file"), attachBtn = $("attach");
+var chipwrap = $("chipwrap"), chat = $("chat");
+var adjunto = null, busy = false;
+
+/* ---------- utilidades DOM seguras (sin innerHTML con datos) ---------- */
+function h(tag, attrs){
+  var el = document.createElement(tag);
+  if (attrs) for (var k in attrs){
+    if (!Object.prototype.hasOwnProperty.call(attrs, k) || attrs[k] == null) continue;
+    if (k === "class") el.className = attrs[k];
+    else if (k === "text") el.textContent = String(attrs[k]);
+    else if (k.slice(0,2) === "on") el.addEventListener(k.slice(2), attrs[k]);
+    else el.setAttribute(k, attrs[k]);
+  }
+  for (var i = 2; i < arguments.length; i++) add(el, arguments[i]);
+  return el;
+}
+function add(el, c){
+  if (c == null || c === false) return;
+  if (Array.isArray(c)) { c.forEach(function(x){ add(el, x); }); return; }
+  el.appendChild(typeof c === "object" ? c : document.createTextNode(String(c)));
+}
+function s(v){ return v == null ? "" : String(v); }
+/* las citas llegan con énfasis markdown (**x**, __x__): se muestran como texto plano */
+function plano(v){ return s(v).replace(/\*\*|__/g, ""); }
+function arr(v){ return Array.isArray(v) ? v : []; }
+function scrollEnd(){ msgs.scrollTop = msgs.scrollHeight; }
+
+/* ---------- sesión ---------- */
+function nuevoId(){ return "s_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2,8); }
+function getSession(){
+  var id = null;
+  try { id = localStorage.getItem("chat_session_id"); } catch(e){}
+  if (!id){ id = nuevoId(); try { localStorage.setItem("chat_session_id", id); } catch(e){} }
+  return id;
+}
+var sessionId = getSession();
+
+/* ---------- red ---------- */
+function fetchJSON(url, opts, timeout){
+  var ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+  opts = opts || {};
+  if (ctrl) opts.signal = ctrl.signal;
+  var timer = null;
+  var p = fetch(url, opts).then(function(r){
+    return r.text().then(function(t){
+      var data = null;
+      try { data = t ? JSON.parse(t) : null; } catch(e){}
+      if (!r.ok){
+        var det = data && data.detail ? (typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail)) : (t || "").slice(0,200);
+        var err = new Error("Error " + r.status + (det ? ": " + det : "")); err.status = r.status; throw err;
+      }
+      if (data === null && t) throw new Error("Respuesta no válida del servidor");
+      return data;
+    });
+  });
+  var tp = new Promise(function(_, rej){
+    timer = setTimeout(function(){ if (ctrl) ctrl.abort(); rej(new Error("TIMEOUT")); }, timeout || 30000);
+  });
+  return Promise.race([p, tp]).finally(function(){ clearTimeout(timer); });
+}
+
+/* ---------- burbujas ---------- */
+function bubbleUser(texto, nombreArchivo){
+  var b = h("div", {class:"bubble"}, texto ? h("div", {class:"txt", text: texto}) : null,
+            nombreArchivo ? h("div", {class:"file", text: "Adjunto: " + nombreArchivo}) : null);
+  msgs.appendChild(h("div", {class:"row u"}, b));
+  scrollEnd();
+}
+function bubbleError(msg){
+  var b = h("div", {class:"bubble err"}, h("b", {text:"No se pudo completar la solicitud. "}), h("span", {text: msg}));
+  msgs.appendChild(h("div", {class:"row a short"}, b));
+  scrollEnd();
+}
+var CONF = {alta:["b-ok","Confianza alta"], media:["b-warn","Confianza media"], sin_respaldo:["b-bad","Sin respaldo normativo"]};
+function confBadge(c){
+  var x = CONF[c] || ["b-gray", c ? "Confianza: " + c : "Confianza no indicada"];
+  return h("span", {class:"badge " + x[0], text: x[1]});
+}
+var RES = {cumple:["b-ok","Cumple"], no_cumple:["b-bad","No cumple"], indeterminado:["b-gray","Indeterminado"]};
+var CONC = {procede:"Procede", procede_con_observaciones:"Procede con observaciones", no_procede:"No procede", requiere_escalamiento:"Requiere escalamiento"};
+
+function refNorma(o){
+  var p = [];
+  if (o.nombre_norma || o.doc_id) p.push(s(o.nombre_norma || o.doc_id) + (o.nombre_norma && o.doc_id ? " (" + o.doc_id + ")" : ""));
+  if (o.articulo != null && o.articulo !== "") p.push("Art. " + o.articulo);
+  if (o.version != null && o.version !== "") p.push("v" + o.version);
+  if (o.estado) p.push(s(o.estado));
+  return p.join(" · ");
+}
+function estadoBadge(e){
+  if (!e) return null;
+  var cls = e === "vigente" ? "b-ok" : (e === "derogada" || e === "derogado" ? "b-bad" : "b-warn");
+  return h("span", {class:"badge " + cls, text: e});
+}
+function strs(v){ return arr(v).filter(function(x){ return x != null && String(x).trim() !== ""; }).map(String); }
+function renderAplica(c){
+  var a = strs(c.areas_aplica);
+  if (!a.length) return null;
+  return h("div", {class:"aplica"}, h("span", {text:"Aplica a:"}), a.map(function(x){ return h("span", {class:"achip", text: x}); }));
+}
+var ES_ADMIN = false;
+var ICON_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>';
+function linkDescarga(docId){
+  if (!docId) return null;
+  var a = h("a", {class:"dl", href: "/api/chat/norma/" + encodeURIComponent(docId) + "/archivo", download: "", title: "Descargar el documento de la norma " + docId});
+  a.innerHTML = ICON_DL;  // icono estático, sin datos del servidor
+  add(a, h("span", {text: "Descargar norma"}));
+  return a;
+}
+function renderCitas(citas){
+  citas = arr(citas); if (!citas.length) return null;
+  return [h("h3", {class:"sec", text:"Citas verificadas"}),
+    h("div", {class:"cites"}, citas.map(function(c){
+      return h("div", {class:"cite"},
+        h("div", {class:"hd"}, s(c.nombre_norma || c.doc_id), " ",
+          h("small", {text: [c.doc_id && c.nombre_norma ? c.doc_id : null, c.articulo ? "Art. " + c.articulo : null, c.version ? "v" + c.version : null].filter(Boolean).join(" · ")}), " ",
+          estadoBadge(c.estado), linkDescarga(c.doc_id)),
+        c.texto ? h("q", {text: plano(c.texto)}) : null,
+        renderAplica(c),
+        c.nota_area ? h("div", {class:"nota-area", text: s(c.nota_area)}) : null);
+    }))];
+}
+function renderWarns(w){
+  w = arr(w); if (!w.length) return null;
+  return h("div", {class:"warns"}, w.map(function(x){ return h("div", {class:"warnbox"}, h("b", {text:"Advertencia: "}), s(x)); }));
+}
+function fmtResultado(c){
+  var r = c.resultado, d = (s(c.descripcion) + " " + s(c.expresion)).toLowerCase();
+  if (typeof r === "number"){
+    if (/(ratio|porcentaje|%|tasa|proporci|endeudamiento|cobertura|ltv)/.test(d) && Math.abs(r) <= 5)
+      return (Math.round(r * 1000) / 10).toLocaleString("es-PE") + "%";
+    return r.toLocaleString("es-PE", {maximumFractionDigits: 4});
+  }
+  return s(r);
+}
+function renderDictamen(d){
+  var conc = s(d.conclusion);
+  var banner = h("div", {class:"banner c-" + (CONC[conc] ? conc : "x")},
+    h("div", null, h("div", {class:"lbl", text:"Dictamen"}), h("div", {class:"conc", text: CONC[conc] || conc || "Sin conclusión"})));
+  var body = h("div", {class:"dbody"});
+  if (d.resumen_caso) add(body, h("div", {class:"resumen", text: d.resumen_caso}));
+  var hechos = arr(d.hechos);
+  if (hechos.length) add(body, [h("h3", {class:"sec", text:"Hechos del caso"}),
+    h("table", {class:"hechos"}, h("tbody", null, hechos.map(function(x){ return h("tr", null, h("td", {text: x.dato}), h("td", {text: x.valor})); })))]);
+  var ev = arr(d.evaluaciones);
+  if (ev.length) add(body, [h("h3", {class:"sec", text:"Evaluación por regla (" + ev.length + ")"}), ev.map(function(e){
+    var r = RES[e.resultado] || ["b-gray", s(e.resultado) || "—"];
+    return h("div", {class:"eval"},
+      h("div", {class:"top"}, h("div", {class:"regla", text: e.regla}), h("span", {class:"badge " + r[0], text: r[1]})),
+      h("div", {class:"ref"}, h("span", {text: refNorma(e)}), " ", linkDescarga(e.doc_id)),
+      e.cita ? h("details", null, h("summary", {text:"Ver cita literal"}), h("span", {class:"quote", text: "“" + plano(e.cita) + "”"})) : null,
+      e.explicacion ? h("div", {class:"expl", text: e.explicacion}) : null);
+  })]);
+  var calc = arr(d.calculos);
+  if (calc.length) add(body, [h("h3", {class:"sec", text:"Cálculos"}), calc.map(function(c){
+    return h("div", {class:"calc"}, h("div", null, h("div", {text: c.descripcion}), c.expresion ? h("code", {text: c.expresion}) : null),
+      h("div", {class:"res", text: "= " + fmtResultado(c)}));
+  })]);
+  var conf = arr(d.conflictos);
+  if (conf.length) add(body, [h("h3", {class:"sec", text:"Conflictos normativos"}), conf.map(function(x){ return h("div", {class:"box conf", text: x}); })]);
+  var vac = arr(d.vacios);
+  if (vac.length) add(body, [h("h3", {class:"sec", text:"Vacíos normativos"}), vac.map(function(x){ return h("div", {class:"box vac", text: x}); })]);
+  var coord = strs(d.areas_a_coordinar);
+  if (coord.length) add(body, [h("h3", {class:"sec", text:"Áreas a coordinar"}), h("div", {class:"coord"}, coord.map(function(x){ return h("span", {class:"achip", text: x}); }))]);
+  var acc = arr(d.acciones);
+  if (acc.length) add(body, [h("h3", {class:"sec", text:"Acciones recomendadas"}), h("ol", {class:"lst"}, acc.map(function(x){ return h("li", {text: x}); }))]);
+  return h("div", {class:"dict"}, banner, body);
+}
+function bubbleAgent(r){
+  r = r || {};
+  var b = h("div", {class:"bubble"});
+  add(b, h("div", {class:"who"}, h("span", {text: r.tipo === "caso" ? "Agente evaluador · Dictamen de caso" : "Agente de consultas"})));
+  if (r.respuesta) add(b, h("div", {class:"txt", text: r.respuesta}));
+  if (r.dictamen && typeof r.dictamen === "object") add(b, renderDictamen(r.dictamen));
+  add(b, renderWarns(r.advertencias));
+  add(b, renderCitas(r.citas));
+  var meta = h("div", {class:"meta"}, confBadge(r.confianza));
+  if (r.latencia_ms != null && r.latencia_ms !== "") add(meta, h("span", {text: "Latencia " + (Number(r.latencia_ms) / 1000).toFixed(1) + " s"}));
+  var rid = r.run_id;
+  // "Cómo razonó": solo para el administrador (el empleado no ve la traza; también está en Trazas del panel).
+  if (rid) add(meta, h("button", {class:"linkbtn razon-btn", type:"button", text:"Cómo razonó",
+    hidden: ES_ADMIN ? null : "", onclick: function(){ openTrace(rid); }}));
+  add(b, meta);
+  msgs.appendChild(h("div", {class:"row a"}, b));
+  scrollEnd();
+}
+
+/* ---------- progreso ---------- */
+function showProgress(){
+  var stEls = STAGES.map(function(t){ return h("div", {class:"stage"}, h("span", {class:"dot"}), h("span", {text: t})); });
+  var el = h("div", {class:"elapsed", text:"0 s"});
+  var row = h("div", {class:"row a short"}, h("div", {class:"bubble"}, h("div", {class:"who", text:"Los agentes están trabajando..."}), h("div", {class:"prog"}, stEls), el));
+  msgs.appendChild(row); scrollEnd();
+  var t0 = Date.now(), idx = 0;
+  function paint(){ stEls.forEach(function(e, i){ e.className = "stage" + (i < idx ? " done" : i === idx ? " on" : ""); e.firstChild.textContent = i < idx ? "✓" : ""; }); }
+  paint();
+  var iv = setInterval(function(){
+    var sec = Math.floor((Date.now() - t0) / 1000);
+    el.textContent = sec + " s";
+    var target = Math.min(STAGES.length - 1, Math.floor(sec / 6));
+    if (target !== idx){ idx = target; paint(); }
+  }, 500);
+  return function(){ clearInterval(iv); if (row.parentNode) row.parentNode.removeChild(row); };
+}
+
+/* ---------- estado vacío ---------- */
+function showEmpty(){
+  msgs.textContent = "";
+  var cardsBox = h("div", {class:"cards"}, h("div", {class:"notice", text:"Cargando casos de ejemplo..."}));
+  var wrap = h("div", {id:"empty"},
+    h("h2", {text:"¿Qué caso necesitas evaluar?"}),
+    h("p", {class:"lead", text:"Describe una operación o adjunta el expediente (PDF, DOCX o TXT). Los agentes extraen los hechos, buscan las normas vigentes, evalúan cada regla y verifican las citas."}),
+    h("h3", {class:"sec", text:"Casos de ejemplo"}), cardsBox,
+    h("h3", {class:"sec", text:"Consultas rápidas"}),
+    h("div", {class:"sugs"}, SUGERIDAS.map(function(q){ return h("button", {class:"sug", type:"button", text:q, onclick:function(){ enviar(q); }}); })));
+  msgs.appendChild(wrap);
+  fetchJSON("/api/chat/ejemplos", null, 15000).then(function(list){
+    cardsBox.textContent = "";
+    list = arr(list);
+    if (!list.length){ add(cardsBox, h("div", {class:"notice", text:"No hay casos de ejemplo disponibles."})); return; }
+    list.forEach(function(c){
+      add(cardsBox, h("button", {class:"card", type:"button", title:"Enviar este caso", onclick:function(){ enviar(s(c.texto)); }},
+        h("div", {class:"k", text: c.id || "Caso"}), h("div", {class:"t", text: c.titulo}), h("div", {class:"d", text: c.texto})));
+    });
+  }).catch(function(e){
+    cardsBox.textContent = "";
+    add(cardsBox, h("div", {class:"notice", text:"No se pudieron cargar los casos de ejemplo (" + e.message + ")."}));
+  });
+}
+function clearEmpty(){ var e = $("empty"); if (e) e.parentNode.removeChild(e); }
+
+/* ---------- adjunto ---------- */
+function setAdjunto(f){
+  if (f){
+    var ok = /\.(pdf|docx|txt)$/i.test(f.name);
+    if (!ok){ bubbleError("Formato no soportado: " + f.name + ". Usa PDF, DOCX o TXT."); return; }
+  }
+  adjunto = f || null;
+  chipwrap.textContent = "";
+  chipwrap.style.display = adjunto ? "block" : "none";
+  if (adjunto) add(chipwrap, h("span", {class:"chip"}, h("span", {text: adjunto.name + " (" + Math.max(1, Math.round(adjunto.size / 1024)) + " KB)"}),
+    h("button", {type:"button", title:"Quitar adjunto", "aria-label":"Quitar adjunto", text:"×", onclick:function(){ setAdjunto(null); }})));
+}
+attachBtn.addEventListener("click", function(){ fileIn.click(); });
+fileIn.addEventListener("change", function(){ setAdjunto(fileIn.files && fileIn.files[0]); fileIn.value = ""; });
+var dragDepth = 0;
+chat.addEventListener("dragenter", function(e){ e.preventDefault(); dragDepth++; chat.classList.add("drop-over"); });
+chat.addEventListener("dragover", function(e){ e.preventDefault(); });
+chat.addEventListener("dragleave", function(){ dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) chat.classList.remove("drop-over"); });
+chat.addEventListener("drop", function(e){
+  e.preventDefault(); dragDepth = 0; chat.classList.remove("drop-over");
+  var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if (f) setAdjunto(f);
+});
+
+/* ---------- envío ---------- */
+function setBusy(v){ busy = v; sendBtn.disabled = v; attachBtn.disabled = v; sendBtn.classList.toggle("busy", v); sendBtn.title = v ? "Evaluando..." : "Enviar"; sendBtn.setAttribute("aria-label", sendBtn.title); }
+function enviar(texto){
+  if (busy) return;
+  texto = s(texto).trim();
+  var f = adjunto;
+  if (!texto && !f) { inp.focus(); return; }
+  clearEmpty();
+  bubbleUser(texto, f ? f.name : null);
+  inp.value = ""; autosize(); setAdjunto(null);
+  var fd = new FormData();
+  fd.append("session_id", sessionId);
+  fd.append("mensaje", texto);
+  if (f) fd.append("archivo", f, f.name);
+  setBusy(true);
+  var stop = showProgress();
+  fetchJSON("/api/chat", {method:"POST", body: fd}, TIMEOUT_MS).then(function(r){
+    stop();
+    if (!r || typeof r !== "object") throw new Error("Respuesta vacía del servidor");
+    bubbleAgent(r);
+  }).catch(function(e){
+    stop();
+    if (e.message === "TIMEOUT" || e.name === "AbortError") bubbleError("El agente no respondió en 120 segundos. Intenta de nuevo o simplifica el caso.");
+    else if (e instanceof TypeError) bubbleError("Sin conexión con el servidor. Verifica la red e intenta de nuevo.");
+    else bubbleError(e.message || "Error desconocido");
+  }).finally(function(){ setBusy(false); inp.focus(); });
+}
+sendBtn.addEventListener("click", function(){ enviar(inp.value); });
+inp.addEventListener("keydown", function(e){
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing){ e.preventDefault(); enviar(inp.value); }
+});
+function autosize(){ inp.style.height = "auto"; inp.style.height = Math.min(220, inp.scrollHeight) + "px"; }
+inp.addEventListener("input", autosize);
+
+/* ---------- historial ---------- */
+function parseMaybe(v){ if (typeof v === "string"){ try { return JSON.parse(v); } catch(e){ return null; } } return v; }
+function cargarHistorial(){
+  msgs.textContent = "";
+  msgs.appendChild(h("div", {class:"notice", id:"loadingHist", text:"Cargando conversación..."}));
+  fetchJSON("/api/chat/" + encodeURIComponent(sessionId), null, 15000).then(function(list){
+    var l = $("loadingHist"); if (l) l.parentNode.removeChild(l);
+    list = arr(list);
+    if (!list.length){ showEmpty(); return; }
+    list.forEach(function(m){
+      try {
+        if (m.rol === "usuario") bubbleUser(m.contenido, (parseMaybe(m.payload) || {}).archivo);
+        else {
+          var p = parseMaybe(m.payload);
+          var r = (p && typeof p === "object") ? Object.assign({}, p) : {};
+          if (!r.respuesta) r.respuesta = m.contenido;
+          if (!r.tipo) r.tipo = m.tipo;
+          if (!r.run_id) r.run_id = m.run_id;
+          bubbleAgent(r);
+        }
+      } catch(e){ bubbleError("No se pudo mostrar un mensaje del historial."); }
+    });
+  }).catch(function(){ showEmpty(); });
+}
+$("newconv").addEventListener("click", function(){
+  if (busy) return;
+  sessionId = nuevoId();
+  try { localStorage.setItem("chat_session_id", sessionId); } catch(e){}
+  setAdjunto(null); inp.value = ""; showEmpty(); inp.focus();
+});
+
+/* ---------- traza (drawer) ---------- */
+var drawer = $("drawer"), scrim = $("scrim"), dcontent = $("dcontent");
+function closeTrace(){ drawer.classList.remove("open"); scrim.style.display = "none"; }
+$("dclose").addEventListener("click", closeTrace);
+scrim.addEventListener("click", closeTrace);
+document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeTrace(); });
+var TIPOS = {input:["E","Entrada"], thought:["R","Razonamiento"], tool_call:["H","Llamada a herramienta"], tool_result:["D","Resultado de herramienta"],
+  final:["F","Respuesta final"], error:["!","Error"], verificacion:["V","Verificación de citas"]};
+function jsonPre(o){ var t; try { t = JSON.stringify(o, null, 2); } catch(e){ t = s(o); } return h("pre", {class:"js", text: t}); }
+function findHits(d){
+  if (!d || typeof d !== "object") return null;
+  var cands = [d.hits, d.resultados, d.results, d.result && d.result.hits, Array.isArray(d.result) ? d.result : null, Array.isArray(d) ? d : null];
+  for (var i = 0; i < cands.length; i++){
+    var c = cands[i];
+    if (Array.isArray(c) && c.length && c[0] && typeof c[0] === "object" && (c[0].id != null || c[0].score != null || c[0].chunk_id != null)) return c;
+  }
+  return null;
+}
+function renderStep(p){
+  var t = TIPOS[p.type] || ["•", p.type || "paso"];
+  var d = p.data;
+  var extra = null;
+  if (d != null && !(typeof d === "object" && !Array.isArray(d) && !Object.keys(d).length)){
+    var hits = findHits(d);
+    if (p.type === "tool_call"){
+      var args = d.args || d.arguments || d.input || d;
+      extra = [d.tool || d.name ? h("div", null, "Herramienta: ", h("b", {text: d.tool || d.name})) : null, h("div", {class:"sh", text:"Argumentos"}), jsonPre(args)];
+    } else if (hits){
+      extra = h("details", null, h("summary", {text: hits.length + " resultados recuperados"}),
+        h("ul", {class:"hits"}, hits.map(function(x){
+          var id = x.id || x.chunk_id || x.doc_id || "?";
+          var sc = typeof x.score === "number" ? x.score.toFixed(3) : s(x.score);
+          return h("li", null, h("code", {text: id}), h("span", {text: sc}));
+        })),
+        h("details", null, h("summary", {text:"Datos completos"}), jsonPre(d)));
+    } else {
+      extra = h("details", {open: p.type === "verificacion" ? "" : null}, h("summary", {text:"Ver datos"}), jsonPre(d));
+    }
+  }
+  var ts = p.ts ? s(p.ts).replace("T", " ").slice(0, 19) : "";
+  return h("div", {class:"step t-" + s(p.type)},
+    h("div", {class:"ic", text: t[0]}),
+    h("div", {class:"sh"}, h("b", {text: (p.n != null ? p.n + ". " : "") + t[1]}), p.agent ? " · " + p.agent : "", ts ? " · " + ts : ""),
+    p.summary ? h("div", {class:"ss", text: p.summary}) : null,
+    extra);
+}
+function openTrace(runId){
+  drawer.classList.add("open"); scrim.style.display = "block";
+  dcontent.textContent = "";
+  if (!runId || runId === "mock"){
+    add(dcontent, h("div", {class:"notice", text:"Esta respuesta no tiene traza registrada (respuesta de demostración)."}));
+    return;
+  }
+  add(dcontent, h("div", {class:"notice", text:"Cargando traza " + runId + "..."}));
+  fetchJSON("/api/trazas/" + encodeURIComponent(runId), null, 20000).then(function(t){
+    dcontent.textContent = "";
+    t = t || {};
+    var pasos = arr(t.pasos);
+    var head = h("div", {class:"meta", style:"margin:0 0 14px"},
+      h("span", {class:"badge b-gray", text: "run " + runId}),
+      t.agente ? h("span", {class:"badge b-gray", text: "agente: " + t.agente}) : null,
+      h("span", {class:"badge b-gray", text: pasos.length + " pasos"}),
+      t.latencia_ms != null ? h("span", {class:"badge b-gray", text: (Number(t.latencia_ms)/1000).toFixed(1) + " s"}) : null,
+      t.consulta && t.consulta.confianza ? confBadge(t.consulta.confianza) : null);
+    add(dcontent, head);
+    if (t.consulta && t.consulta.pregunta) add(dcontent, h("div", {class:"cite", style:"margin-bottom:14px"}, h("div", {class:"sh", text:"Consulta"}), h("div", {text: t.consulta.pregunta})));
+    if (!pasos.length){ add(dcontent, h("div", {class:"notice", text:"La traza no contiene pasos."})); return; }
+    add(dcontent, h("div", {class:"tl"}, pasos.map(function(p){ try { return renderStep(p || {}); } catch(e){ return h("div", {class:"notice", text:"Paso no representable"}); } })));
+  }).catch(function(e){
+    dcontent.textContent = "";
+    add(dcontent, h("div", {class:"notice", text:"No se pudo cargar la traza: " + (e.message === "TIMEOUT" ? "tiempo de espera agotado" : e.message)}));
+  });
+}
+
+fetch("/auth/me", {credentials: "same-origin"}).then(function(r){ return r.json(); }).then(function(me){
+  if (me && me.usuario) $("who").textContent = me.usuario + (me.area ? " · " + me.area : (me.rol === "admin" ? " · administrador" : " · empleado"));
+  if (me && me.rol === "admin") {
+    $("adminlink").hidden = false;
+    ES_ADMIN = true;
+    Array.prototype.forEach.call(document.querySelectorAll(".razon-btn"), function(b){ b.hidden = false; });
+  }
+}).catch(function(){});
+cargarHistorial();
+inp.focus();
+})();
+</script>
+</body>
+</html>

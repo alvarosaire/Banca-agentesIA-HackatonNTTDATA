@@ -1,0 +1,6 @@
+{
+  "blocked_tools": [],
+  "max_values": {"cantidad": 20000},
+  "approval_thresholds": {"cantidad": 5000},
+  "require_approval_tools": []
+}

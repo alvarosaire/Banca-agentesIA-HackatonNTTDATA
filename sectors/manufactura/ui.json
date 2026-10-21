@@ -1,0 +1,11 @@
+{
+  "title": "Agentes de IA — Control de calidad",
+  "subtitle": "Un inspector y un planificador gestionan lotes defectuosos; retener y replanificar grandes volúmenes requiere aprobación humana.",
+  "case_label": "Lotes a revisar",
+  "tool_names": {"consultar_lote": "Consultar lote", "retener_lote": "Retener lote",
+                 "replanificar_linea": "Replanificar línea"},
+  "field_names": {"lote_id": "Lote", "id": "ID", "producto": "Producto", "linea": "Línea", "unidades": "Unidades",
+                  "tasa_defectos_pct": "Defectos (%)", "limite_defectos_pct": "Límite defectos (%)",
+                  "defecto_principal": "Defecto principal", "estado": "Estado", "motivo": "Motivo",
+                  "cantidad": "Cantidad", "orden_id": "Orden", "creada": "Creada", "aprobacion": "Aprobación"}
+}

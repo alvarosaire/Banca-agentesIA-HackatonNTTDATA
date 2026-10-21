@@ -1,0 +1,22 @@
+Procedimiento de Atención de Reclamos de Crédito
+Código
+PRO-ATE-2026-111
+Entidad emisora
+Banco Andino (ficticio) — DOCUMENTO SINTÉTICO PARA DEMO
+Fecha de emisión
+2026-04-13
+Fecha de vigencia
+2026-05-01
+Estado
+vigente
+Versión
+1.0
+Reemplaza a
+Ninguna
+Aviso: documento ficticio creado solo para pruebas del hackathon. No es una norma real.
+Artículo 1. Recepción
+Los reclamos se reciben en agencias, banca telefónica y canales digitales.
+Artículo 2. Registro
+Cada reclamo se registra con un número de seguimiento que se entrega al cliente.
+Artículo 3. Respuesta
+La respuesta se comunica por escrito al cliente por el medio que eligió.

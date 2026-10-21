@@ -1,0 +1,69 @@
+# Modo dual (CADDY_MODE=dual): HTTPS con certificado válido + HTTP por IP como respaldo.
+#  - https://{$APP_HOST}  (p. ej. 169-58-187-13.sslip.io) -> Let's Encrypt
+#  - https://<IP>           -> certificado de IP de Let's Encrypt (perfil shortlived), si la CA lo emite
+#  - http://<IP>            -> respaldo para redes que bloquean sslip.io
+{
+	# Los clientes no envían SNI al conectarse por IP: usar el certificado de la IP por defecto
+	default_sni {$PUBLIC_IP}
+}
+
+(rutas) {
+	encode gzip
+	# Público: login y salud
+	@publico path /login /logout /auth/* /health
+	handle @publico {
+		reverse_proxy app:8000
+	}
+	# Chat: empleado o administrador
+	@chat path /chat /api/chat /api/chat/*
+	handle @chat {
+		forward_auth app:8000 {
+			uri /auth/check?rol=empleado
+			copy_headers X-Usuario X-Rol X-Area
+			# la verificación es un GET normal: sin los encabezados del websocket de Streamlit
+			header_up -Connection
+			header_up -Upgrade
+		}
+		reverse_proxy app:8000
+	}
+	# API y documentación: solo administrador
+	@api path /api/* /docs /openapi.json
+	handle @api {
+		forward_auth app:8000 {
+			uri /auth/check?rol=admin
+			copy_headers X-Usuario X-Rol X-Area
+			# la verificación es un GET normal: sin los encabezados del websocket de Streamlit
+			header_up -Connection
+			header_up -Upgrade
+		}
+		reverse_proxy app:8000
+	}
+	# Panel (Streamlit): solo administrador
+	handle {
+		forward_auth app:8000 {
+			uri /auth/check?rol=admin
+			copy_headers X-Usuario X-Rol X-Area
+			# la verificación es un GET normal: sin los encabezados del websocket de Streamlit
+			header_up -Connection
+			header_up -Upgrade
+		}
+		reverse_proxy ui:8501
+	}
+}
+
+{$APP_HOST} {
+	import rutas
+}
+
+{$PUBLIC_IP} {
+	tls {
+		issuer acme {
+			profile shortlived
+		}
+	}
+	import rutas
+}
+
+http://{$PUBLIC_IP}, :80 {
+	import rutas
+}

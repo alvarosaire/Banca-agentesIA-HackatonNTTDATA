@@ -1,0 +1,24 @@
+DOCUMENTO DE EJEMPLO BASADO EN NORMATIVA SBS, PARA DEMO
+SBS-EJ-01: Reglamento de Transparencia de Información y Atención de Reclamos (ejemplo)
+Tipo: Reglamento
+Entidad: Superintendencia de Banca, Seguros y AFP (ejemplo, no oficial)
+Fecha de emisión: 15 de junio de 2023
+Vigente desde: 1 de enero de 2024
+
+Artículo 1. Objeto
+El presente reglamento establece las obligaciones de las empresas del sistema financiero respecto de la transparencia de la información que brindan a los usuarios y la atención de sus reclamos.
+
+Artículo 2. Información de tasas y comisiones
+Las empresas deben informar la Tasa de Costo Efectivo Anual (TCEA) en toda oferta de crédito, así como las comisiones y gastos aplicables, de manera clara y destacada.
+
+Artículo 3. Hoja resumen
+Antes de la contratación, la empresa entrega al usuario una hoja resumen con el monto, la tasa de interés, la TCEA, el cronograma de pagos y las comisiones aplicables.
+
+Artículo 4. Plazo de atención de reclamos
+Los reclamos presentados por los usuarios deben ser atendidos en un plazo no mayor de 15 días hábiles contados desde su presentación. Excepcionalmente, el plazo puede extenderse cuando la complejidad del caso lo justifique, comunicándolo al usuario.
+
+Artículo 5. Canales de reclamo
+Las empresas deben habilitar canales presenciales y digitales para la presentación de reclamos, y entregar al usuario un código de registro.
+
+Artículo 6. Modificación de condiciones contractuales
+Las modificaciones de tasas, comisiones y gastos deben ser comunicadas con una anticipación no menor de 45 días calendario a su aplicación.
